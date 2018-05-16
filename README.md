@@ -19,6 +19,8 @@ void add(GLOBAL_MEM Real* results, GLOBAL_MEM Real* a, int n) {
 }
 ```
 
+Next, this is the calling Python code. The comments explain the calls into the `cluda` library. 
+
 ```python
 
 import os
@@ -57,7 +59,7 @@ def test_add():
         tmpl_dir = here_dir
     )
     
-    # Now let's actually call our "CLUDA" add function.
+    # Now let's actually call our "CLUDA" add function. We specify the grid and block via keyword arguments.
     module.add(
         gpu_results, gpu_in, np.int32(n),
         grid = (n_blocks, 1, 1), block = (block_size, 1, 1)
@@ -70,4 +72,4 @@ def test_add():
     np.testing.assert_almost_equal(out, a + b)
 ```
 
-The interface is pretty minimal, but it's been enough for everything I've used it for so far and the fundamental idea has been incredibly helpful.
+The interface is pretty minimal, but it's been enough for everything I've used it for so far and the fundamental idea has been incredibly helpful. Of course, everything here expects that you know how to program in CUDA or OpenCL through PyCUDA and PyOpenCL -- if you understand one, it's a very small step to understanding the other. This library has very little source, so if you'd like to improve it some way, it should be simple to understand the code base and make some changes!
